@@ -1,0 +1,72 @@
+@import "tailwindcss";
+/* Import Tailwind CSS v4 */
+
+/* Enable manual class-based dark mode for the 'dark:' prefix */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 🌟 GLOBAL SCROLLBAR DESIGN */
+
+/* Width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Thumb (scroll handle) */
+::-webkit-scrollbar-thumb {
+  background: #cbd5f5; /* light mode */
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 🌙 DARK MODE */
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Firefox support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5f5 transparent;
+}
+
+.dark * {
+  scrollbar-color: #475569 transparent;
+}
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Fix width calculation */
+* {
+  box-sizing: border-box;
+}
+
+.input {
+  @apply w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-black dark:text-white;
+}

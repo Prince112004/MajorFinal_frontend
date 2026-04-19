@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbaar from "../components/Navbaar";
 import TableModal from "../components/TableModal";
 import Contact from "../components/Student/Contact";
-import AttendanceTracker from "../components/Student/AttendanceTracker";
+import Attendance from "../components/Attendance/Attendance"
 import BacklogCourseManagement from "../components/Student/BacklogCourseManagement";
 import NoticeBoard from "../components/Student/NoticeBoard";
 import Assignment from "../components/Student/Assignment";
@@ -32,7 +32,7 @@ const Student = () => {
       case "timetable":
         return <TableModal />;
       case "attendance":
-        return <AttendanceTracker />;
+        return <Attendance />;
       case "registration":
         return <CourseRegistration />;
       case "backlog":
@@ -70,7 +70,7 @@ const Student = () => {
       )}
 
       {/* Layout */}
-      <div className="flex flex-1 w-full overflow-hidden px-2">
+      <div className="flex flex-1 w-full overflow-hidden ">
         {/* ================= SIDEBAR ================= */}
         <div
           className={`
@@ -135,8 +135,8 @@ const Student = () => {
         </div>
 
         {/* ================= CONTENT ================= */}
-        <div className="flex-1 overflow-y-auto p-1">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 p-4 min-h-full flex flex-col">
+        <div className="flex-1 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900  shadow-md border border-slate-200 dark:border-slate-700 p-2 min-h-full flex flex-col">
             {renderContent()}
           </div>
         </div>

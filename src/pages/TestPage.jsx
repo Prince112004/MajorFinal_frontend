@@ -17,7 +17,7 @@ import Navbaar from "../components/Navbaar"
 // 2️⃣ Removed the duplicate TableModal import
 import TableModal from "../components/TableModal";
 import FacultyTimeTableModal from "../components/Faculty/FacultyTimeTableModal";
-import Attendance from "../components/Faculty/Attendance";
+import Attendance from "../components/Attendance/Attendance";
 import Leave from "../components/Faculty/Leave";
 import Workload from "../components/Faculty/Workload";
 import ContactAdmin from "../components/Faculty/ContactAdmin";

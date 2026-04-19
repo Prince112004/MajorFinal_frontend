@@ -7,7 +7,7 @@ const Notification = ({ open, setOpen }) => {
       {/* 🔲 Overlay */}
       <div
         onClick={() => setOpen(false)}
-        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/40 z-60 transition-opacity duration-300 ${
           open ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       />
@@ -15,7 +15,7 @@ const Notification = ({ open, setOpen }) => {
       {/* 📦 RIGHT SIDE DRAWER */}
       <div
         className={`fixed top-0 right-0 h-full w-[85%] sm:w-96 
-        bg-white dark:bg-slate-900 shadow-2xl z-50 
+        bg-white dark:bg-slate-900 shadow-2xl z-61 
         transform transition-transform duration-300 ease-in-out
         ${open ? "translate-x-0" : "translate-x-full"}`}
       >

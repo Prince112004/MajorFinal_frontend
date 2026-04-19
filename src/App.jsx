@@ -37,7 +37,7 @@ const App = () => {
 
   return (
     <>
-      <div className="bg-gray-300 dark:bg-black min-h-screen max-h-fit w-screen">
+      <div className="bg-gray-300 dark:bg-black min-h-screen md:min-h-[100dvh] w-screen">
         <ToastProvider />
 
         <Routes>
@@ -50,7 +50,6 @@ const App = () => {
           <Route path="/incharge" element={<Incharge />} />
           <Route path="/test" element={<TestPage />} />
           {/* <Route path="/generate" element={<GenerateTable />} /> */}
-          
 
           {/* --- Protected Routes --- */}
 

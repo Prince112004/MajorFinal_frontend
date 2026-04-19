@@ -28,8 +28,8 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
         ></div>
 
         <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden z-[101] flex flex-col max-h-[90vh]">
-          {/* Modal Header */}
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 flex items-start justify-between text-white shrink-0">
+          {/* Modal Header - CHANGED TO EMERALD */}
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 flex items-start justify-between text-white shrink-0">
             <div className="flex items-center gap-4">
               {/* CLICKABLE PROFILE PICTURE */}
               <div
@@ -37,7 +37,6 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                 className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold backdrop-blur-md border border-white/30 shrink-0 cursor-pointer hover:scale-105 hover:bg-white/30 transition-all shadow-sm"
                 title="Click to expand"
               >
-                {/* If you add 'imageUrl' to your data later, you can render an <img src={faculty.imageUrl} /> here instead */}
                 {faculty.teacher
                   ? faculty.teacher.replace("Dr. ", "").charAt(0)
                   : "F"}
@@ -45,14 +44,14 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
 
               <div>
                 <h2 className="text-2xl font-bold">{faculty.teacher}</h2>
-                <p className="text-indigo-100 font-medium">
+                <p className="text-emerald-50 font-medium">
                   {faculty.designation}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 bg-black/20 hover:bg-black/40 rounded-full transition-colors"
+              className="cursor-pointer p-3 bg-black/20 hover:bg-black/40 rounded-full transition-colors"
             >
               <X size={20} />
             </button>
@@ -64,7 +63,8 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
               {/* Left Column */}
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg shrink-0">
+                  {/* ICON BG CHANGED TO EMERALD/TEAL */}
+                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0">
                     <Hash size={18} />
                   </div>
                   <div>
@@ -78,7 +78,7 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0">
+                  <div className="p-2 bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400 rounded-lg shrink-0">
                     <Building size={18} />
                   </div>
                   <div>
@@ -95,7 +95,7 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg shrink-0">
+                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0">
                     <GraduationCap size={18} />
                   </div>
                   <div>
@@ -112,7 +112,7 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
               {/* Right Column */}
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 rounded-lg shrink-0">
+                  <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0">
                     <Mail size={18} />
                   </div>
                   <div>
@@ -126,7 +126,7 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-2 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-lg shrink-0">
+                  <div className="p-2 bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400 rounded-lg shrink-0">
                     <Phone size={18} />
                   </div>
                   <div>
@@ -147,7 +147,8 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
             {/* Research Areas */}
             <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2 mb-4">
-                <BookOpen size={18} className="text-slate-500" />
+                {/* ICON COLOR CHANGED */}
+                <BookOpen size={18} className="text-emerald-500" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                   Research Areas
                 </h3>
@@ -157,7 +158,7 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                   faculty.researchAreas.map((area, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm rounded-lg font-medium"
+                      className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 text-sm rounded-lg font-medium border border-emerald-100 dark:border-emerald-800"
                     >
                       {area}
                     </span>
@@ -178,7 +179,7 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                 href={`mailto:${faculty.email}`}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-medium transition-colors shadow-sm ${
                   faculty.email
-                    ? "bg-indigo-600 hover:bg-indigo-700 text-white"
+                    ? "bg-emerald-600 hover:bg-emerald-700 text-white"
                     : "bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed pointer-events-none"
                 }`}
               >
@@ -193,12 +194,12 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                 }
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-medium transition-colors shadow-sm ${
                   faculty.contact
-                    ? "bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
+                    ? "bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-700"
                     : "bg-slate-100 dark:bg-slate-800 border border-transparent text-slate-400 cursor-not-allowed pointer-events-none"
                 }`}
               >
                 <Phone size={18} />
-                Call Faculty
+                Contact Faculty
               </a>
             </div>
           </div>
@@ -209,20 +210,18 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
       {isImageExpanded && (
         <div
           className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
-          onClick={() => setIsImageExpanded(false)} // Clicking anywhere closes it
+          onClick={() => setIsImageExpanded(false)}
         >
-          {/* Close Button */}
           <button
-            className="absolute top-6 right-6 text-white hover:text-slate-300 transition-colors p-2"
+            className="absolute top-6 right-6 text-white hover:text-emerald-400 transition-colors p-2"
             onClick={() => setIsImageExpanded(false)}
           >
             <X size={32} />
           </button>
 
-          {/* The Expanded Picture */}
           <div
             className="relative flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()} // Prevents closing if they click exactly on the picture
+            onClick={(e) => e.stopPropagation()}
           >
             {faculty.imageUrl ? (
               <img
@@ -231,8 +230,7 @@ const FacultyDetailModal = ({ faculty, onClose }) => {
                 className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
               />
             ) : (
-              // Fallback large initial if there is no image URL
-              <div className="w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-8xl sm:text-9xl font-bold text-white shadow-[0_0_50px_rgba(99,102,241,0.4)] border-4 border-white/20 select-none">
+              <div className="w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-8xl sm:text-9xl font-bold text-white shadow-[0_0_50px_rgba(16,185,129,0.4)] border-4 border-white/20 select-none">
                 {faculty.teacher
                   ? faculty.teacher.replace("Dr. ", "").charAt(0)
                   : "F"}

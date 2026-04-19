@@ -4,6 +4,7 @@ import RoomList from "./RoomList";
 import AddRoomModal from "./AddRoomModal";
 import useAdminStore from "../../store/useAdminStore";
 import { toast } from "react-toastify";
+import CustomLoader from "../../ui/CustomLoader";
 
 const Room = () => {
   const [selectedBranch, setSelectedBranch] = useState("");
@@ -81,8 +82,8 @@ const Room = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#f8fafc] dark:bg-[#0f172a] p-1 font-sans text-gray-800 dark:text-gray-100">
-      <div className="max-w-7xl mx-auto space-y-4">
+    <div className="min-h-full w-full bg-[#f8fafc] dark:bg-[#0f172a]  font-sans text-gray-800 dark:text-gray-100">
+      <div className="w-full mx-auto space-y-4">
         <RoomHeader
           selectedBranch={selectedBranch}
           setSelectedBranch={setSelectedBranch}
@@ -113,8 +114,8 @@ const Room = () => {
         )}
 
         {isRoomsLoading ? (
-          <div className="flex justify-center h-40 items-center text-teal-500">
-            Loading...
+          <div className="flex justify-center h-130 items-center text-teal-500">
+            <CustomLoader variant="green"/>
           </div>
         ) : (
           <RoomList

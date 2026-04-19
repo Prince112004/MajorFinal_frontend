@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-// Removed useNavigate as it wasn't being used, add it back if you need it later
-
-// 1️⃣ Corrected the lucide-react imports to match what you actually use
 import {
   Menu,
   X,
@@ -27,12 +24,12 @@ import Room from "../components/Room/Room";
 
 const Incharge = () => {
   const [openSidebar, setOpenSidebar] = useState(false);
-  const [activeView, setActiveView] = useState("schedule");
+  const [activeView, setActiveView] = useState("overview");
 
   const renderContent = () => {
     switch (activeView) {
       case "overview":
-        return <Overview />;
+        return <AdminOverview />;
       case "generate":
         return <GenerateTable />;
       case "timetable":
@@ -46,31 +43,24 @@ const Incharge = () => {
       case "room":
         return <Room />;
       default:
-        return <div>Select something</div>;
+        return <AdminOverview />;
     }
   };
 
   // 🔁 Render content dynamically
   const menuItems = [
     { key: "overview", label: "Overview", icon: LayoutDashboard },
-
     { key: "generate", label: "Generate Table", icon: CalendarDays },
-
     { key: "timetable", label: "Time Table", icon: Table },
-
     { key: "faculty", label: "Faculty Directory", icon: Users },
-
     { key: "course", label: "Course Management", icon: BookOpen },
-
     { key: "batch", label: "Batch Management", icon: Layers },
-
     { key: "room", label: "Room Management", icon: DoorOpen },
-
     { key: "request", label: "Pending Requests", icon: ClipboardList },
   ];
 
   return (
-    <div className="h-screen flex flex-col bg-slate-100 dark:bg-slate-900 overflow-hidden">
+    <div className="h-screen flex flex-col  overflow-hidden">
       {/* Navbar */}
       <Navbaar />
 
@@ -78,12 +68,12 @@ const Incharge = () => {
       {openSidebar && (
         <div
           onClick={() => setOpenSidebar(false)}
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          className="fixed inset-0 bg-black/40 z-50 md:hidden"
         />
       )}
 
       {/* Layout */}
-      <div className="flex flex-1 w-full overflow-hidden px-2">
+      <div className="flex flex-1 w-full overflow-hidden">
         {/* ================= SIDEBAR ================= */}
         <div
           className={`
@@ -124,7 +114,7 @@ const Incharge = () => {
                   }}
                   className={`
                     flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                    transition-all duration-200
+                    transition-all duration-200 cursor-pointer
 
                     ${
                       activeView === item.key
@@ -147,8 +137,8 @@ const Incharge = () => {
         </div>
 
         {/* ================= CONTENT ================= */}
-        <div className="flex-1 overflow-y-auto p-1">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 p-4 min-h-full flex">
+        <div className="flex-1 overflow-y-auto ">
+          <div className="bg-white dark:bg-slate-900  shadow-md border border-slate-200 dark:border-slate-700 p-4 min-h-full flex">
             {renderContent()}
           </div>
         </div>
@@ -157,7 +147,7 @@ const Incharge = () => {
       {/* ================= FLOAT BUTTON ================= */}
       <button
         onClick={() => setOpenSidebar(true)}
-        className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-105 transition z-50"
+        className="md:hidden fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-105 transition z-40"
       >
         <Menu size={24} />
       </button>

@@ -27,11 +27,7 @@ const CourseSearchList = ({
     // h-full ensures it takes up the 600px defined in the parent
     // overflow-hidden prevents the whole component from growing
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Scrollable Area */}
-      {/* 1. flex-1 allows this div to take up all remaining space.
-          2. overflow-y-auto enables the internal scrollbar.
-          3. pb-10 (Padding Bottom) is the secret to making sure the last card is never cropped.
-      */}
+     
       <div className="flex-1 overflow-y-auto p-4 pb-20 space-y-3 custom-scrollbar">
         {filtered.length > 0 ? (
           filtered.map((course) => {
@@ -101,7 +97,7 @@ const CourseSearchList = ({
                     className={`shrink-0 p-2.5 rounded-xl transition-all ${
                       isSelected
                         ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
-                        : "bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-500 group-hover:scale-110"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-400 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-500 group-hover:scale-110 cursor-pointer"
                     }`}
                   >
                     {isSelected ? (

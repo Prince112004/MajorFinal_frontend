@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Navbaar from "../components/Navbaar"
+import Navbaar from "../components/Navbaar";
 import TableModal from "../components/TableModal";
 import FacultyTimeTableModal from "../components/Faculty/FacultyTimeTableModal";
 import ContactAdmin from "../components/Faculty/ContactAdmin";
-import Attendance from "../components/Faculty/Attendance";
+import Attendance from "../components/Attendance/Attendance";
 import Leave from "../components/Faculty/Leave";
 import Workload from "../components/Faculty/Workload";
 import {
@@ -48,8 +48,6 @@ const Faculty = () => {
     { key: "workload", label: "Workload", icon: BarChart3 },
     { key: "request", label: "Request Change", icon: MessageSquare },
   ];
-  
-  
 
   return (
     <div className="h-screen flex flex-col bg-slate-100 dark:bg-slate-900 overflow-hidden">
@@ -65,13 +63,13 @@ const Faculty = () => {
       )}
 
       {/* Layout */}
-      <div className="flex flex-1 w-full overflow-hidden px-2">
+      <div className="flex flex-1 w-full overflow-hidden">
         {/* ================= SIDEBAR ================= */}
         <div
           className={`
             fixed md:static top-0 left-0 h-full w-64 
             bg-white dark:bg-slate-900
-            border-r border-slate-200 dark:border-slate-800
+            border-r border-t border-slate-200 dark:border-slate-800
             z-50 transform transition-transform duration-300
             ${openSidebar ? "translate-x-0" : "-translate-x-full"}
             md:translate-x-0 flex flex-col
@@ -129,8 +127,8 @@ const Faculty = () => {
         </div>
 
         {/* ================= CONTENT ================= */}
-        <div className="flex-1 overflow-y-auto p-1">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700 p-4 min-h-full flex ">
+        <div className="flex-1 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 shadow-md border border-slate-200 dark:border-slate-700 p-4 min-h-full flex ">
             {renderContent()}
           </div>
         </div>

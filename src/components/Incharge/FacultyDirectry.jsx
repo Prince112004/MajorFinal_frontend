@@ -1,60 +1,88 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BarChart3, Plus } from "lucide-react"; // Added Plus icon
+import { LayoutDashboard, BarChart3, ChartPie, Contact } from "lucide-react";
 import OverviewFacultyData from "./OverviewFacultyData";
 import FacultyData from "./FacultyData";
 
 const FacultyDirectry = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
-  // Dynamic header content based on the selected tab
   const headerContent = {
     overview: {
+      icon: <ChartPie />,
       title: "Faculty Overview",
       subtitle: "Analytical insights and department statistics.",
+      accent: "from-emerald-500/20 to-teal-500/20",
+      iconColor: "text-emerald-600 dark:text-emerald-400",
     },
     stats: {
+      icon: <Contact />,
       title: "Faculty Directory",
       subtitle: "Manage, view, and organize all faculty members.",
+      accent: "from-teal-500/20 to-cyan-500/20",
+      iconColor: "text-teal-600 dark:text-teal-400",
     },
   };
 
-  // Helper function to handle navigation routing via switch
   const renderContent = () => {
     switch (activeTab) {
       case "overview":
         return <OverviewFacultyData />;
       case "stats":
         return <FacultyData />;
-      // Add more cases here in the future as needed
       default:
-        return <OverviewFacultyData />; // Fallback component
+        return <OverviewFacultyData />;
     }
   };
 
   return (
-    <div className="flex-1 w-full flex flex-col h-full overflow-hidden bg-white dark:bg-slate-900 transition-colors duration-300">
-      {/* --- TOP NAVIGATION HEADER --- */}
-      <div className="flex-none flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 md:px-4 border-b border-slate-200 dark:border-slate-800">
-        {/* Left Side: Dynamic Title & Subtitle */}
-        <div className="flex-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight transition-all">
-            {headerContent[activeTab].title}
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 transition-all">
-            {headerContent[activeTab].subtitle}
-          </p>
+    <div className="flex-1 w-full flex flex-col h-full overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500">
+      {/* --- HEADER SECTION --- */}
+      <div className="w-full bg-gray-100 dark:bg-slate-900 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-gray-300 dark:border-slate-800 p-2 mb-8 flex flex-col md:flex-row justify-between items-center gap-6 transition-all relative">
+        {/* Decorative Blur - Matches exact reference positioning */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            className={`absolute -top-10 -left-10 w-40 h-40 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-full blur-3xl`}
+          />
         </div>
 
-        {/* Right Side: Tab Bar & Add Button */}
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
-          {/* Segmented Control / Tabs */}
-          <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl border border-transparent dark:border-slate-700/50 w-full sm:w-auto">
+        {/* Left Side: Icon & Info */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-4 p-1">
+            {/* Icon Container: Matches w-10 h-10 and rounded-xl */}
+            <div className="relative shrink-0">
+              <div className="flex items-center justify-center w-10 h-10 bg-emerald-50 border border-emerald-100 shadow-sm rounded-xl">
+                {React.cloneElement(headerContent[activeTab].icon, {
+                  size: 20,
+                  className: "text-emerald-600",
+                })}
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl font-extrabold tracking-tight bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent">
+                  {headerContent[activeTab].title}
+                </h1>
+                <span className="hidden md:inline-flex items-center px-1.5 py-0.5 rounded-md text-[8px] font-black bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 uppercase tracking-widest border border-emerald-200 dark:border-emerald-800/50">
+                  Live
+                </span>
+              </div>
+              <p className="italic text-xs font-md font-thin text-slate-500 tracking-widest uppercase">
+                {headerContent[activeTab].subtitle || "Management Portal"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side: Navigation Tabs - Sized to match dropdown/button height */}
+        <div className="flex items-center w-full md:w-auto relative z-10 px-1">
+          <div className="flex w-full p-1 bg-gray-200/50 dark:bg-slate-800/50 rounded-xl border border-gray-300/50 dark:border-slate-700">
             <button
               onClick={() => setActiveTab("overview")}
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 text-xs font-bold rounded-lg transition-all duration-300 cursor-pointer ${
                 activeTab === "overview"
-                  ? "bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-600/50"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800"
+                  ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
               }`}
             >
               <LayoutDashboard size={16} />
@@ -63,24 +91,27 @@ const FacultyDirectry = () => {
 
             <button
               onClick={() => setActiveTab("stats")}
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 text-xs font-bold rounded-lg transition-all duration-300 cursor-pointer ${
                 activeTab === "stats"
-                  ? "bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-600/50"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-800"
+                  ? "bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
               }`}
             >
               <BarChart3 size={16} />
-              <span>Faculty</span>
+              <span>Directory</span>
             </button>
           </div>
-
-          
         </div>
       </div>
 
-      {/* --- SCROLLABLE CONTENT AREA --- */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 dark:bg-[#0b1120]">
-        {renderContent()}
+      {/* --- CONTENT AREA --- */}
+      <div className="flex-1 overflow-y-auto bg-slate-50 dark:bg-[#020617] relative">
+        {/* Subtle Background Pattern for Depth */}
+        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
+
+        <div className="relative p-4 md:p-8 max-w-[1600px] mx-auto animate-in fade-in zoom-in-95 duration-500">
+          {renderContent()}
+        </div>
       </div>
     </div>
   );

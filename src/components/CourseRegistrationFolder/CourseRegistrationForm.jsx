@@ -53,14 +53,14 @@ const CourseRegistrationForm = ({ currentSemAvailableCourses = [] }) => {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto p-3 sm:p-4 lg:p-6 space-y-6 lg:space-y-10 animate-in fade-in duration-500">
+    <div className="max-w-[1600px] mx-auto  p-1 space-y-6 lg:space-y-10 animate-in fade-in duration-500">
       {!isSubmitted ? (
         <>
           {/* TOP SECTION: THE ADDING TOOLS */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             {/* 1. CourseSearchList (Left - Stacked on mobile, 5 cols on desktop) */}
             <div className="order-2 lg:order-1 lg:col-span-5 w-full">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[32px] border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col h-[500px] lg:h-[680px]">
+              <div className="bg-white dark:bg-slate-900 rounded-md border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col h-[500px] lg:h-[680px]">
                 <div className="p-4 lg:p-6 border-b border-slate-100 dark:border-slate-800 space-y-4 bg-slate-50/50 dark:bg-slate-800/30">
                   <h2 className="text-lg lg:text-xl font-bold flex items-center gap-2 dark:text-white">
                     <BookCheck size={20} className="text-emerald-500" />
@@ -74,7 +74,7 @@ const CourseRegistrationForm = ({ currentSemAvailableCourses = [] }) => {
                     <input
                       type="text"
                       placeholder="Quick find subject..."
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl lg:rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl lg:rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none text-sm transition-all dark:text-gray-300"
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
@@ -92,7 +92,7 @@ const CourseRegistrationForm = ({ currentSemAvailableCourses = [] }) => {
 
             {/* 2. ManualAddForm (Right - Stacked on mobile, 7 cols on desktop) */}
             <div className="order-1 lg:order-2 lg:col-span-7 space-y-6 w-full">
-              <div className="bg-white dark:bg-slate-900 rounded-2xl lg:rounded-[32px] p-5 lg:p-8 border border-slate-200 dark:border-slate-800 shadow-xl">
+              <div className="bg-white dark:bg-slate-900 rounded-md p-5 lg:p-8 border border-slate-200 dark:border-slate-800 shadow-xl">
                 <div className="flex items-center gap-3 mb-6 lg:mb-8">
                   <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl">
                     <Sparkles

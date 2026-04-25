@@ -6,119 +6,151 @@ import {
   AlertCircle,
   FileText,
   Trash2,
+  CheckCircle,
+  XCircle,
+  ArrowRight,
 } from "lucide-react";
 
 const RegistrationSummary = ({ selectedCourses, onRemove }) => {
-  // --- Logic: Calculate Stats ---
   const stats = {
     total: selectedCourses.length,
     credits: selectedCourses.reduce((sum, c) => sum + Number(c.credits), 0),
     theory: selectedCourses.filter((c) => c.type === "Theory").length,
     practical: selectedCourses.filter((c) => c.type === "Lab").length,
-    backlog: selectedCourses.filter((c) => c.nature === "BACKLOG").length,
+    regular: selectedCourses.filter((c) => c.registrationType === "Regular")
+      .length,
+    backlog: selectedCourses.filter((c) => c.registrationType === "Backlog")
+      .length,
+    dropped: selectedCourses.filter((c) => c.registrationType === "Dropped")
+      .length,
   };
 
-  if (selectedCourses.length === 0) return null;
+  const getRowColor = (registrationType) => {
+    switch (registrationType) {
+      case "Regular":
+        return "bg-emerald-50/50 dark:bg-emerald-950/20 hover:bg-emerald-50 dark:hover:bg-emerald-950/30";
+      case "Backlog":
+        return "bg-red-50/50 dark:bg-red-950/20 hover:bg-red-50 dark:hover:bg-red-950/30";
+      case "Dropped":
+        return "bg-amber-50/50 dark:bg-amber-950/20 hover:bg-amber-50 dark:hover:bg-amber-950/30";
+      default:
+        return "hover:bg-slate-50/50 dark:hover:bg-slate-800/30";
+    }
+  };
+
+  const getBadgeColor = (registrationType) => {
+    switch (registrationType) {
+      case "Regular":
+        return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300";
+      case "Backlog":
+        return "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300";
+      case "Dropped":
+        return "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300";
+      default:
+        return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
+    }
+  };
+
+  const getTypeIcon = (type) => {
+    switch (type) {
+      case "Regular":
+        return <CheckCircle size={12} />;
+      case "Backlog":
+        return <AlertCircle size={12} />;
+      case "Dropped":
+        return <XCircle size={12} />;
+      default:
+        return null;
+    }
+  };
+
+  // Show info banner when no courses are selected
+  if (selectedCourses.length === 0) {
+    return (
+      <div className="flex flex-col h-[420px] space-y-6 animate-in slide-in-from-bottom-4 duration-500 overflow-hidden">
+        {/* Empty State Banner */}
+        <div className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col min-w-0">
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-20 h-20 mb-4 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center">
+              <BookOpen className="w-10 h-10 text-slate-400 dark:text-slate-500" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 mb-2">
+              No Courses Selected
+            </h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-4">
+              You haven't added any courses to your registration yet. Browse the
+              available courses below to get started.
+            </p>
+            <div className="inline-flex items-center gap-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1.5 rounded-full">
+              <span>👇</span>
+              <span>Add courses from Available Courses section</span>
+              <ArrowRight size={14} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
-      {/* 📊 Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <StatCard
-          label="Total Subjects"
-          value={stats.total}
-          icon={<FileText size={20} />}
-          color="indigo"
-        />
-        <StatCard
-          label="Total Credits"
-          value={stats.credits}
-          icon={<Calculator size={20} />}
-          color="emerald"
-        />
-        <StatCard
-          label="Theory"
-          value={stats.theory}
-          icon={<BookOpen size={20} />}
-          color="amber"
-        />
-        <StatCard
-          label="Practicals"
-          value={stats.practical}
-          icon={<Microscope size={20} />}
-          color="blue"
-        />
-        <StatCard
-          label="Backlogs"
-          value={stats.backlog}
-          icon={<AlertCircle size={20} />}
-          color="red"
-        />
-      </div>
-
-      {/* 📋 Details Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-widest">
-                <th className="px-6 py-4">Code</th>
-                <th className="px-6 py-4">Subject Name</th>
-                <th className="px-6 py-4">Type</th>
-                <th className="px-6 py-4 text-center">L-T-P</th>
-                <th className="px-6 py-4 text-center">Credits</th>
-                <th className="px-6 py-4">Nature</th>
-                <th className="px-6 py-4 text-right">Action</th>
+    <div className="flex flex-col h-[420px] space-y-6 animate-in slide-in-from-bottom-4 duration-500 overflow-hidden ">
+      {/* 📋 Details Table - No horizontal scroll */}
+      <div className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col min-w-0">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <table className="w-full text-left border-collapse min-w-0 table-fixed">
+            <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800 z-10">
+              <tr className="text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-widest">
+                <th className="px-4 py-4 w-[90px]">Code</th>
+                <th className="px-4 py-4">Subject Name</th>
+                <th className="px-4 py-4 text-center w-[80px]">Credits</th>
+                <th className="px-4 py-4 text-center w-[100px]">Type</th>
+                <th className="px-4 py-4 text-right w-[70px]">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {selectedCourses.map((course) => (
                 <tr
                   key={course.code}
-                  className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
+                  className={`transition-colors ${getRowColor(course.registrationType)}`}
                 >
-                  <td className="px-6 py-4 font-bold text-indigo-600 dark:text-indigo-400 text-sm">
+                  <td
+                    className="px-4 py-3 font-bold text-indigo-600 dark:text-indigo-400 text-sm truncate"
+                    title={course.code}
+                  >
                     {course.code}
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-200">
-                    {course.name}
+                  <td className="px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+                    <div className="truncate" title={course.name}>
+                      {course.name}
+                    </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`text-[10px] font-bold px-2 py-1 rounded-lg ${
-                        course.type === "Theory"
-                          ? "bg-amber-100 text-amber-700"
-                          : "bg-blue-100 text-blue-700"
-                      }`}
-                    >
-                      {course.type}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-center font-mono text-xs text-slate-500">
-                    {course.L}-{course.T}-{course.P}
-                  </td>
-                  <td className="px-6 py-4 text-center">
+                  <td className="px-4 py-3 text-center">
                     <span className="font-bold text-slate-900 dark:text-white">
                       {course.credits}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-3 text-center">
                     <span
-                      className={`text-[10px] font-bold ${
-                        course.nature === "CORE"
-                          ? "text-emerald-500"
-                          : course.nature === "BACKLOG"
-                            ? "text-red-500"
-                            : "text-slate-400"
-                      }`}
+                      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${getBadgeColor(course.registrationType)}`}
                     >
-                      ● {course.nature}
+                      {getTypeIcon(course.registrationType)}
+                      <span className="hidden sm:inline">
+                        {course.registrationType}
+                      </span>
+                      <span className="sm:hidden">
+                        {course.registrationType === "Regular"
+                          ? "Reg"
+                          : course.registrationType === "Backlog"
+                            ? "Back"
+                            : "Drop"}
+                      </span>
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-4 py-3 text-right">
                     <button
                       onClick={() => onRemove(course.code)}
-                      className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                      title="Remove course"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -133,7 +165,6 @@ const RegistrationSummary = ({ selectedCourses, onRemove }) => {
   );
 };
 
-// --- Sub-component: Stat Card ---
 const StatCard = ({ label, value, icon, color }) => {
   const colors = {
     indigo:
@@ -148,11 +179,11 @@ const StatCard = ({ label, value, icon, color }) => {
 
   return (
     <div
-      className={`p-4 rounded-2xl border ${colors[color]} flex flex-col items-center text-center gap-1`}
+      className={`p-3 rounded-xl border ${colors[color]} flex flex-col items-center text-center gap-0.5`}
     >
-      <div className="mb-1">{icon}</div>
-      <span className="text-2xl font-black">{value}</span>
-      <span className="text-[10px] font-bold uppercase tracking-tighter opacity-80">
+      <div className="mb-0.5">{icon}</div>
+      <span className="text-xl font-black">{value}</span>
+      <span className="text-[9px] font-bold uppercase tracking-tighter opacity-80">
         {label}
       </span>
     </div>

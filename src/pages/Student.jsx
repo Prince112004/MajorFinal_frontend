@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import Navbaar from "../components/Navbaar";
 import TableModal from "../components/TableModal";
-import Contact from "../components/Student/Contact";
 import Attendance from "../components/Attendance/Attendance"
-import BacklogCourseManagement from "../components/Student/BacklogCourseManagement";
+//import BacklogCourseManagement from "../components/Student/BacklogCourseManagement";
 import NoticeBoard from "../components/Student/NoticeBoard";
-import Assignment from "../components/Student/Assignment";
 
 import CourseRegistration from "../components/Student/CourseRegistration";
 
@@ -35,12 +33,8 @@ const Student = () => {
         return <Attendance />;
       case "registration":
         return <CourseRegistration />;
-      case "backlog":
-        return <BacklogCourseManagement />;
       case "notices":
         return <NoticeBoard />;
-      case "contact":
-        return <Contact />;
       default:
         return <TableModal />;
     }
@@ -51,9 +45,7 @@ const Student = () => {
     { key: "timetable", label: "My Timetable", icon: CalendarDays },
     { key: "attendance", label: "Attendance", icon: ClipboardCheck },
     { key: "registration", label: "Course Registration", icon: BookPlus },
-    { key: "backlog", label: "Backlogs", icon: History },
     { key: "notices", label: "Notice Board", icon: Bell },
-    { key: "contact", label: "Helpdesk / Support", icon: MessageSquare },
   ];
 
   return (

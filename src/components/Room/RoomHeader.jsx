@@ -42,7 +42,7 @@ const RoomHeader = ({onAddClick }) => {
           }`}
         >
           <Plus size={20} />
-          Assign Room
+          Add Room
         </button>
       </div>
     </div>

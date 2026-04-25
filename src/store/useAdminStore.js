@@ -61,8 +61,11 @@ const useAdminStore = create((set, get) => ({
   isLoading: false,
   isSaving: false, // Loading state specifically for the save button
   error: null,
-  rooms: [], // Array to hold assigned rooms/labs
-  isRoomsLoading: false,
+  // Room State
+  rooms: [],
+  isLoadingRooms: false,
+  isSavingRoom: false,
+  roomError: null,
   courses: [],
 
   //====================sessions==========================================================
@@ -392,118 +395,215 @@ const useAdminStore = create((set, get) => ({
   },
 
   // Action to fetch room assignments
-  fetchAllRooms: async () => {
-    set({ isRoomsLoading: true, error: null, rooms: [] });
+  fetchRooms: async () => {
+    set({ isLoadingRooms: true, roomError: null });
     try {
       const response = await axiosInstance.get("/admin/room");
-      const rooms = response.data.data || response.data || [];
-
-      // Transform backend data to frontend format
-      const formattedRooms = rooms.map((room) => ({
-        id: room._id,
-        _id: room._id,
-        branch: room.department || room.branch,
-        batchName: room.batch_name || room.batchName,
-        batch_id: room.batch_id,
-        labName: room.lab_name || room.labName,
-        roomNumber: room.room_number || room.roomNumber,
-      }));
-
-      set({ rooms: formattedRooms, isRoomsLoading: false });
-      return formattedRooms;
+       console.log("Full API Response:", response);
+       console.log("Response data:", response.data);
+       console.log("Rooms array:", response.data?.data);
+      if (response.data.success) {
+        set({ rooms: response.data.data, isLoadingRooms: false });
+        
+        return { success: true, data: response.data.data };
+      } else {
+        throw new Error(response.data.message || "Failed to fetch rooms");
+      }
     } catch (error) {
-      console.error("Failed to fetch all rooms:", error);
+      console.error("Failed to fetch rooms:", error);
       set({
-        error:
+        roomError:
           error.response?.data?.message ||
           error.message ||
           "Failed to fetch rooms",
-        isRoomsLoading: false,
+        isLoadingRooms: false,
       });
-      return [];
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
+      };
     }
   },
 
-  saveRoomsToBackend: async (newRooms) => {
-    set({ isSaving: true, error: null });
+  // ====================== CREATE SINGLE ROOM ====================================
+  createRoom: async (roomData) => {
+    set({ isSavingRoom: true, roomError: null });
     try {
-      // Format rooms for backend
-      const rows = newRooms.map((room) => ({
-        batch_id: room.batch_id || room.batchId,
-        room_number: room.roomNumber,
-        lab_name: room.labName,
+      // Format data for backend
+      const formattedData = {
+        room_code: roomData.room_code.toUpperCase(),
+        building_name: roomData.building_name || "Gyan Mandir",
+        room_type: roomData.room_type,
+        capacity: roomData.capacity ? parseInt(roomData.capacity) : null,
+      };
+
+      const response = await axiosInstance.post("/admin/room", formattedData);
+
+      if (response.data.success) {
+        // Refresh rooms list
+        await get().fetchRooms();
+        set({ isSavingRoom: false });
+        return { success: true, data: response.data.data };
+      } else {
+        throw new Error(response.data.message || "Failed to create room");
+      }
+    } catch (error) {
+      console.error("Failed to create room:", error);
+      set({
+        roomError:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to create room",
+        isSavingRoom: false,
+      });
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
+      };
+    }
+  },
+
+  // ====================== BULK CREATE ROOMS ====================================
+  bulkCreateRooms: async (rooms) => {
+    set({ isSavingRoom: true, roomError: null });
+    try {
+      // Format all rooms for bulk upload
+      const formattedRooms = rooms.map((room) => ({
+        room_code: room.room_code.toUpperCase(),
+        building_name: room.building_name || "Gyan Mandir",
+        room_type: room.room_type,
+        capacity: room.capacity ? parseInt(room.capacity) : null,
       }));
 
       const response = await axiosInstance.post("/admin/room/bulk", {
-        rows: rows,
+        rows: formattedRooms,
       });
 
       if (response.data.success) {
-        set({ isSaving: false });
-        return true;
+        // Refresh rooms list after bulk upload
+        await get().fetchRooms();
+        set({ isSavingRoom: false });
+        return {
+          success: true,
+          summary: response.data.summary,
+          errors: response.data.errors,
+        };
+      } else {
+        throw new Error(response.data.message || "Failed to create rooms");
       }
-      throw new Error(response.data.message || "Failed to save rooms");
     } catch (error) {
-      console.error("Failed to save rooms:", error);
+      console.error("Failed to bulk create rooms:", error);
       set({
-        error:
+        roomError:
           error.response?.data?.message ||
           error.message ||
-          "Failed to save rooms",
-        isSaving: false,
+          "Failed to create rooms",
+        isSavingRoom: false,
       });
-      return false;
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
+      };
     }
   },
 
-  // Update room in backend - ACTUAL API CALL
-  updateRoomInBackend: async (roomId, updatedData) => {
-    set({ isLoading: true, error: null });
+  // ====================== GET ROOM BY ID ====================================
+  getRoomById: async (roomId) => {
+    set({ isLoadingRooms: true, roomError: null });
     try {
-      const response = await axiosInstance.put(`/admin/room/${roomId}`, {
-        room_number: updatedData.roomNumber,
-        lab_name: updatedData.labName,
-      });
+      const response = await axiosInstance.get(`/admin/room/${roomId}`);
 
       if (response.data.success) {
-        set({ isLoading: false });
-        return true;
+        set({ isLoadingRooms: false });
+        return { success: true, data: response.data.data };
+      } else {
+        throw new Error(response.data.message || "Failed to fetch room");
       }
-      throw new Error(response.data.message || "Failed to update room");
+    } catch (error) {
+      console.error("Failed to fetch room:", error);
+      set({
+        roomError:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to fetch room",
+        isLoadingRooms: false,
+      });
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
+      };
+    }
+  },
+
+  // ====================== UPDATE ROOM ====================================
+  updateRoom: async (roomId, updatedData) => {
+    set({ isSavingRoom: true, roomError: null });
+    try {
+      // Format the update data
+      const formattedData = {
+        room_code: updatedData.room_code.toUpperCase(),
+        building_name: updatedData.building_name || "Gyan Mandir",
+        room_type: updatedData.room_type,
+        capacity: updatedData.capacity ? parseInt(updatedData.capacity) : null,
+      };
+
+      const response = await axiosInstance.put(
+        `/admin/room/${roomId}`,
+        formattedData,
+      );
+
+      if (response.data.success) {
+        // Refresh rooms list
+        await get().fetchRooms();
+        set({ isSavingRoom: false });
+        return { success: true, data: response.data.data };
+      } else {
+        throw new Error(response.data.message || "Failed to update room");
+      }
     } catch (error) {
       console.error("Failed to update room:", error);
       set({
-        error:
+        roomError:
           error.response?.data?.message ||
           error.message ||
           "Failed to update room",
-        isLoading: false,
+        isSavingRoom: false,
       });
-      return false;
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
+      };
     }
   },
 
-  // Delete room from backend - ACTUAL API CALL
-  deleteRoomFromBackend: async (roomId) => {
-    set({ isLoading: true, error: null });
+  // ====================== DELETE ROOM ====================================
+  deleteRoom: async (roomId) => {
+    set({ isSavingRoom: true, roomError: null });
     try {
       const response = await axiosInstance.delete(`/admin/room/${roomId}`);
 
       if (response.data.success) {
-        set({ isLoading: false });
-        return true;
+        set((state) => ({
+          rooms: state.rooms.filter((room) => room._id !== roomId),
+          isSavingRoom: false,
+        }));
+        return { success: true };
+      } else {
+        throw new Error(response.data.message || "Failed to delete room");
       }
-      throw new Error(response.data.message || "Failed to delete room");
     } catch (error) {
       console.error("Failed to delete room:", error);
       set({
-        error:
+        roomError:
           error.response?.data?.message ||
           error.message ||
           "Failed to delete room",
-        isLoading: false,
+        isSavingRoom: false,
       });
-      return false;
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
+      };
     }
   },
   //==============================================================

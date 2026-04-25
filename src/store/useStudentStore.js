@@ -108,25 +108,24 @@ export const useStudentStore = create((set, get) => ({
 
       // ================== 🧪 DUMMY DATA (FOR NOW) ==================
 
-      // Mapping logic to bridge Roman Numerals ("II") to Numbers (2)
-      const semesterMap = {
-        I: 1,
-        II: 2,
-        III: 3,
-        IV: 4,
-        V: 5,
-        VI: 6,
-        VII: 7,
-        VIII: 8,
-      };
-      const numericSem = semesterMap[semester] || semester;
-
+      // Fetch ALL courses - ignoring branch and semester
       setTimeout(() => {
-        const filteredCourses = courses.filter(
-          (course) =>
-            (!branch || course.branch === branch) &&
-            (!semester || course.semester === numericSem), // Match numeric version
-        );
+        // Get all courses from the store
+        const allCourses = courses || [];
+
+        // If you want to keep some filtering but make it optional, use this:
+        // For now, returning ALL courses regardless of branch and semester
+        const filteredCourses = allCourses; // No filtering - show all courses
+
+        // Alternative: If you want to show courses based on branch only (no semester filter):
+        // const filteredCourses = allCourses.filter(course =>
+        //   (!branch || course.branch === branch)
+        // );
+
+        // Alternative: If you want to show courses based on semester only (no branch filter):
+        // const filteredCourses = allCourses.filter(course =>
+        //   (!semester || course.semester === semesterNumeric)
+        // );
 
         set({
           currentSemAvailableCourses: filteredCourses,
@@ -140,7 +139,6 @@ export const useStudentStore = create((set, get) => ({
     }
   },
 
-  
   submitRegistration: async (courses) => {
     set({ isCourseLoading: true });
 

@@ -22,26 +22,52 @@ const Login = () => {
   };
 
  const handleSubmit = async (e) => {
-   e.preventDefault();
-   toast.dismiss();
+  e.preventDefault();
+  toast.dismiss();
 
-   try {
-     const user = await login(formData);
+  try {
+    const response = await login(formData);
+    
+    // Print the complete response
+    console.log("========== COMPLETE BACKEND RESPONSE ==========");
+    console.log("Full response object:", JSON.stringify(response, null, 2));
+    console.log("Response type:", typeof response);
+    console.log("Response keys:", Object.keys(response));
+    console.log("===============================================");
+    
+    // If response has a 'user' property, print that too
+    if (response.user) {
+      console.log("========== USER OBJECT ==========");
+      console.log("User data:", JSON.stringify(response.user, null, 2));
+      console.log("User role:", response.user.role);
+      console.log("User ID:", response.user.id);
+      console.log("User email:", response.user.email);
+      console.log("================================");
+    }
+    
+    // If response has a 'token' property
+    if (response.token) {
+      console.log("Token received:", response.token.substring(0, 50) + "...");
+    }
+    
+    console.log("===============================================");
 
-     if (user.role === "incharge") {
-       navigate("/inch");
-     } else if (user.role === "faculty") {
-       navigate("/fac");
-     } else if (user.role === "student") {
-       navigate("/stud");
-     } else {
-       navigate("/");
-     }
-   } catch (error) {
-     console.log("Login failed"); // ❌ Ensure your useAuthStore isn't ALSO firing a toast!
-   }
- };
-
+    // Now handle navigation based on role
+    const user = response.user || response; // Handle both cases
+    if (user.role === "admin") {
+      navigate("/incharge");
+    } else if (user.role === "faculty") {
+      navigate("/faculty");
+    } else if (user.role === "student") {
+      navigate("/student");
+    } else {
+      navigate("/");
+    }
+  } catch (error) {
+    console.log("Login failed", error);
+    console.log("Error details:", error.response?.data);
+  }
+};
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-200 dark:bg-gray-950 transition-colors duration-300 p-4">
       <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 space-y-6 transition-colors duration-300 border border-gray-100 dark:border-gray-800">

@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {useAuthStore} from "../store/useAuthStore"
 
 // Inline mock for the preview environment compilation.
 // In your actual app, replace this with: import { useAuthStore } from "../store/useAuthStore";
-const useAuthStore = () => ({
-  signup: async (payload) => console.log("Signup payload:", payload),
-  isSigningUp: false,
-});
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -36,33 +33,28 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match. Please try again.");
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match. Please try again.");
+    return;
+  }
 
-    // Construct exactly what the backend expects
-    const payload = {
-      institute_name: formData.institute_name,
-      username: formData.username,
-      short_name: formData.short_name,
-      address: formData.address,
-      state: formData.state,
-      email_domain: formData.email_domain,
-      email: formData.email,
-      country: formData.country,
-      password: formData.password,
-    };
-
-    console.log("Sending payload:", payload);
-
-    // Call the Zustand store to handle the API request
-    // Assuming signup returns a promise or you handle navigation via useEffect/store
-    await signup(payload);
-    // navigate("/login"); // Uncomment when backend is connected successfully
+  const payload = {
+    institute_name: formData.institute_name,
+    username: formData.username,
+    short_name: formData.short_name,
+    address: formData.address,
+    state: formData.state,
+    email_domain: formData.email_domain,
+    email: formData.email,
+    country: formData.country,
+    password: formData.password,
   };
+
+  await signup(payload);
+  navigate("/signup"); // Uncomment or add this
+};
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 dark:bg-gray-950 transition-colors duration-300 p-4 py-6">

@@ -11,6 +11,7 @@ import {
   DoorOpen,
   ClipboardList,
 } from "lucide-react";
+import {useAuthStore} from "../store/useAuthStore"
 
 import Navbaar from "../components/Navbaar";
 // 2️⃣ Removed the duplicate TableModal import
@@ -23,6 +24,8 @@ import Batch from "../components/Batch/Batch";
 import Room from "../components/Room/Room";
 
 const Incharge = () => {
+  const {authUser} =useAuthStore();
+
   const [openSidebar, setOpenSidebar] = useState(false);
   const [activeView, setActiveView] = useState("overview");
 
@@ -58,6 +61,10 @@ const Incharge = () => {
     { key: "room", label: "Room Management", icon: DoorOpen },
     { key: "request", label: "Pending Requests", icon: ClipboardList },
   ];
+  const truncateUsername = (name, maxLength = 10) => {
+    if (!name) return "";
+    return name.length > maxLength ? `${name.slice(0, maxLength)}...` : name;
+  };
 
   return (
     <div className="h-screen flex flex-col  overflow-hidden">
@@ -95,7 +102,9 @@ const Incharge = () => {
           </div>
 
           {/* Title */}
-          <h1 className="text-2xl text-blue-600 font-bold px-2">Dr. Broken</h1>
+          <h1 className="text-2xl text-blue-600 font-bold px-2">
+            {truncateUsername(authUser?.username, 10)}
+          </h1>
           <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 px-2">
             Admin Panel
           </h2>

@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect } from "react";
 import useAdminStore from "../../store/useAdminStore";
+import CustomLoader from "../../ui/CustomLoader"
 import {
   Users,
   Building,
@@ -20,6 +21,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { div } from "framer-motion/client";
 
 const OverviewFacultyData = () => {
   const { faculty, isLoading, error, fetchFaculty } = useAdminStore();
@@ -114,7 +116,7 @@ const OverviewFacultyData = () => {
   if (isLoading) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center text-slate-500 dark:text-slate-400">
-        <Loader2 size={40} className="animate-spin mb-4 text-indigo-500" />
+        <CustomLoader  variant="green"/>
         <p className="text-base font-medium animate-pulse">
           Analyzing faculty data...
         </p>
@@ -140,6 +142,7 @@ const OverviewFacultyData = () => {
   }
 
   if (faculty.length === 0) return null;
+    
 
   return (
     <div className="flex-1 h-full w-full overflow-y-auto pr-2 pb-4 space-y-4 scrollbar-hide">

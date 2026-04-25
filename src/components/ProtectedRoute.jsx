@@ -1,9 +1,8 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuthStore } from "../store/useAuthStore"; // Update this path if needed
+import { useAuthStore } from "../store/useAuthStore";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  // Pull the current user and loading state from Zustand
   const { authUser, isCheckingAuth } = useAuthStore();
 
   // 1. Wait for the initial authentication check to finish
@@ -15,24 +14,27 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     );
   }
 
-  // 2. Not Logged In? Send them to the login page immediately.
+  // 2. Not Logged In? Send them to the login page
   if (!authUser) {
     return <Navigate to="/login" replace />;
   }
 
-  // 3. Role Checking: If this route requires specific roles, check if the user has one
-  if (allowedRoles && !allowedRoles.includes(authUser.role)) {
-    // If they try to access a page they shouldn't, kick them back to their own portal
-    if (authUser.role === "incharge")
-      return <Navigate to="/incharge" replace />;
-    if (authUser.role === "faculty") return <Navigate to="/faculty" replace />;
-    if (authUser.role === "student") return <Navigate to="/student" replace />;
-
-    // Ultimate fallback if the role is weird
-    return <Navigate to="/" replace />;
+  // 3. Role Checking: If this route requires specific roles
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(authUser.role)) {
+    // Redirect to their role-specific page
+    switch (authUser.role) {
+      case "admin":
+        return <Navigate to="/incharge" replace />;
+      case "faculty":
+        return <Navigate to="/faculty" replace />;
+      case "student":
+        return <Navigate to="/student" replace />;
+      default:
+        return <Navigate to="/" replace />;
+    }
   }
 
-  // 4. If they pass all checks, render the page they asked for!
+  // 4. If they pass all checks, render the page
   return children;
 };
 

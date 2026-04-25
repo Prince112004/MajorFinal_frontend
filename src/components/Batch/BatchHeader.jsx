@@ -4,7 +4,7 @@ import { Layers, Plus } from "lucide-react";
 
 const branches = ["CSE", "ECE", "IT", "MECH", "CIVIL"];
 
-const BatchHeader = ({ selectedBranch, setSelectedBranch, onAddClick }) => {
+const BatchHeader = ({  onAddClick }) => {
   return (
     <div className="w-full bg-gray-100 dark:bg-slate-900 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-gray-300 dark:border-slate-800 p-2 mb-8 flex flex-col md:flex-row justify-between items-center gap-6 transition-all relative">
       {/* FIXED: Decorative blur container exactly like reference */}
@@ -31,23 +31,11 @@ const BatchHeader = ({ selectedBranch, setSelectedBranch, onAddClick }) => {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto relative z-10">
-        <div className="w-full sm:w-56">
-          <CustomDropdown
-            label="Branch:"
-            options={branches}
-            value={selectedBranch}
-            onChange={setSelectedBranch}
-            placeholder="Select Branch"
-          />
-        </div>
 
         <button
           onClick={onAddClick}
-          disabled={!selectedBranch}
           className={`w-full sm:w-auto px-6 py-3 rounded-xl font-bold shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2 ${
-            selectedBranch
-              ? "cursor-pointer bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 text-white shadow-indigo-500/30 hover:shadow-indigo-500/50"
-              : "bg-gray-200 dark:bg-slate-800 text-gray-400 dark:text-gray-500 cursor-not-allowed shadow-none"
+             "cursor-pointer bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-400 hover:to-violet-500 text-white shadow-indigo-500/30 hover:shadow-indigo-500/50"
           }`}
         >
           <Plus size={20} />

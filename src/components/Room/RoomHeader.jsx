@@ -4,7 +4,7 @@ import { DoorOpen, Plus } from "lucide-react"; // DoorOpen fits the 'Room' theme
 
 const branches = ["CSE", "ECE", "IT", "MECH", "CIVIL"];
 
-const RoomHeader = ({ selectedBranch, setSelectedBranch, onAddClick }) => {
+const RoomHeader = ({onAddClick }) => {
   return (
     <div className="w-full bg-gray-100 dark:bg-slate-900 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-gray-300 dark:border-slate-800 p-2 mb-8 flex flex-col md:flex-row justify-between items-center gap-6 transition-all relative">
       {/* Decorative Blur - Matched exactly to reference */}
@@ -31,23 +31,14 @@ const RoomHeader = ({ selectedBranch, setSelectedBranch, onAddClick }) => {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto relative z-10">
-        <div className="w-full sm:w-56">
-          <CustomDropdown
-            label="Branch:"
-            options={branches}
-            value={selectedBranch}
-            onChange={setSelectedBranch}
-            placeholder="Select Branch"
-          />
-        </div>
+        
 
         <button
           onClick={onAddClick}
-          disabled={!selectedBranch}
           className={`w-full sm:w-auto px-6 py-3 rounded-xl font-bold shadow-lg transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2 ${
-            selectedBranch
-              ? "cursor-pointer bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white shadow-teal-500/30 hover:shadow-teal-500/50"
-              : "bg-gray-200 dark:bg-slate-800 text-gray-400 dark:text-gray-500 cursor-not-allowed shadow-none"
+           
+              "cursor-pointer bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-400 hover:to-emerald-500 text-white shadow-teal-500/30 hover:shadow-teal-500/50"
+             
           }`}
         >
           <Plus size={20} />

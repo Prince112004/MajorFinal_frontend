@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import ToastProvider from "./components/toastify";
 import useThemeStore from "./store/useHomeStore";
-import { useAuthStore } from "./store/useAuthStore"; // <-- Imported auth store to check session
-import ProtectedRoute from "./components/ProtectedRoute"; // <-- Imported the ProtectedRoute component
+import { useAuthStore } from "./store/useAuthStore";
+import ProtectedRoute from "./components/ProtectedRoute";
+import CustomLoader from "./ui/CustomLoader";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -12,20 +13,16 @@ import Faculty from "./pages/Faculty";
 import Incharge from "./pages/Incharge";
 import Homepage from "./pages/HomePage";
 import TestPage from "./pages/TestPage";
-// import GenerateTable from "./pages/GenerateTable";
+
 const App = () => {
-  // 1. Pull the theme state from Zustand
   const { theme } = useThemeStore();
+  const { checkAuth, isCheckingAuth } = useAuthStore();
 
-  // 2. Pull the checkAuth function from auth store
-  const { checkAuth } = useAuthStore();
-
-  // 3. Check if the user is logged in when the app first loads or refreshes
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  // 4. Handle the HTML class globally for light/dark mode
+  // Handle theme
   useEffect(() => {
     const root = window.document.documentElement;
     if (theme === "dark") {
@@ -35,57 +32,88 @@ const App = () => {
     }
   }, [theme]);
 
+  // Show loading screen while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="text-center">
+          <CustomLoader variant="blue"/>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <>
-      <div className="bg-gray-300 dark:bg-black min-h-screen md:min-h-[100dvh] w-screen">
-        <ToastProvider />
+    <div className="bg-gray-300 dark:bg-black min-h-screen md:min-h-[100dvh] w-screen">
+      <ToastProvider />
 
-        <Routes>
-          {/* --- Public Routes --- */}
-          <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/faculty" element={<Faculty />} />
-          <Route path="/student" element={<Student />} />
-          <Route path="/incharge" element={<Incharge />} />
-          <Route path="/test" element={<TestPage />} />
-          {/* <Route path="/generate" element={<GenerateTable />} /> */}
+      <Routes>
+        {/* --- Public Routes --- */}
+        <Route path="/" element={<Homepage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/test" element={<TestPage />} />
 
-          {/* --- Protected Routes --- */}
+        {/* --- Protected Routes (Authentication Required) --- */}
+        
+        {/* Admin Route - Only 'admin' role can access */}
 
-          {/* Student Portal - Only 'student' tag can access */}
-          {/* <Route
-          path="/stud"
+
+        {/* Incharge Route - Only 'incharge' role can access */}
+        <Route
+          path="/incharge"
           element={
-            <ProtectedRoute allowedRoles={["student"]}>
-              <Student />
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Incharge />
             </ProtectedRoute>
           }
-        /> */}
+        />
 
-          {/* Faculty Portal - Only 'faculty' tag can access */}
-          {/* <Route
-          path="/fac"
+        {/* Faculty Route - Only 'faculty' role can access */}
+        <Route
+          path="/faculty"
           element={
             <ProtectedRoute allowedRoles={["faculty"]}>
               <Faculty />
             </ProtectedRoute>
           }
-        /> */}
+        />
 
-          {/* Incharge Portal - Only 'incharge' tag can access */}
-          {/* <Route
-          path="/inch"
+        {/* Student Route - Only 'student' role can access */}
+        <Route
+          path="/student"
           element={
-            <ProtectedRoute allowedRoles={["incharge"]}>
-              <Incharge />
+            <ProtectedRoute allowedRoles={["student"]}>
+              <Student />
             </ProtectedRoute>
           }
-        /> */}
-        </Routes>
-      </div>
-    </>
+        />
+
+        {/* Optional: Role-specific dashboard redirects */}
+        {/* If user visits /dashboard, redirect based on role */}
+
+        {/* Catch-all route - redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
   );
+};
+
+// Helper component to redirect users to their role-specific page
+const RoleBasedRedirect = () => {
+  const { authUser } = useAuthStore();
+  
+  switch (authUser?.role) {
+    case "admin":
+      return <Navigate to="/incharge" replace />;
+    case "faculty":
+      return <Navigate to="/faculty" replace />;
+    case "student":
+      return <Navigate to="/student" replace />;
+    default:
+      return <Navigate to="/" replace />;
+  }
 };
 
 export default App;

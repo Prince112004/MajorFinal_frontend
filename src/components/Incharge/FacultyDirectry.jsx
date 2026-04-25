@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { LayoutDashboard, BarChart3, ChartPie, Contact } from "lucide-react";
+import {
+  LayoutDashboard,
+  BarChart3,
+  ChartPie,
+  Contact,
+  Plus,
+} from "lucide-react";
 import OverviewFacultyData from "./OverviewFacultyData";
 import FacultyData from "./FacultyData";
+import AddFacultyModal from "../Faculty/Add faculty/AddFacultyModal";
 
 const FacultyDirectry = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const headerContent = {
     overview: {
@@ -23,6 +31,21 @@ const FacultyDirectry = () => {
     },
   };
 
+  // Handle adding faculty
+  const handleAddFaculty = async (facultyData) => {
+    // Here you would typically make an API call to save the data
+    console.log("Adding faculty:", facultyData);
+
+    // Simulate API call
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // You can update your state here or refresh the data
+        console.log("Faculty added successfully");
+        resolve();
+      }, 1000);
+    });
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case "overview":
@@ -38,17 +61,14 @@ const FacultyDirectry = () => {
     <div className="flex-1 w-full flex flex-col h-full overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500">
       {/* --- HEADER SECTION --- */}
       <div className="w-full bg-gray-100 dark:bg-slate-900 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-gray-300 dark:border-slate-800 p-2 mb-8 flex flex-col md:flex-row justify-between items-center gap-6 transition-all relative">
-        {/* Decorative Blur - Matches exact reference positioning */}
+        {/* Decorative Blur */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div
-            className={`absolute -top-10 -left-10 w-40 h-40 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-full blur-3xl`}
-          />
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-full blur-3xl" />
         </div>
 
         {/* Left Side: Icon & Info */}
         <div className="relative z-10">
           <div className="flex items-center gap-4 p-1">
-            {/* Icon Container: Matches w-10 h-10 and rounded-xl */}
             <div className="relative shrink-0">
               <div className="flex items-center justify-center w-10 h-10 bg-emerald-50 border border-emerald-100 shadow-sm rounded-xl">
                 {React.cloneElement(headerContent[activeTab].icon, {
@@ -74,9 +94,19 @@ const FacultyDirectry = () => {
           </div>
         </div>
 
-        {/* Right Side: Navigation Tabs - Sized to match dropdown/button height */}
-        <div className="flex items-center w-full md:w-auto relative z-10 px-1">
-          <div className="flex w-full p-1 bg-gray-200/50 dark:bg-slate-800/50 rounded-xl border border-gray-300/50 dark:border-slate-700">
+        {/* Right Side: Navigation Tabs */}
+        <div className="flex flex-col-reverse md:flex-row items-center gap-3 w-full md:w-auto relative z-10 px-1">
+          {/* Add Faculty Button */}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="cursor-pointer w-full md:w-auto flex items-center justify-center gap-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-emerald-600/20 active:scale-[0.98]"
+          >
+            <Plus size={16} />
+            <span>Add Faculty</span>
+          </button>
+
+          {/* Tab Container */}
+          <div className="flex w-full md:w-auto p-1 bg-gray-200/50 dark:bg-slate-800/50 rounded-xl border border-gray-300/50 dark:border-slate-700">
             <button
               onClick={() => setActiveTab("overview")}
               className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2 text-xs font-bold rounded-lg transition-all duration-300 cursor-pointer ${
@@ -106,13 +136,18 @@ const FacultyDirectry = () => {
 
       {/* --- CONTENT AREA --- */}
       <div className="flex-1 overflow-y-auto bg-slate-50 dark:bg-[#020617] relative">
-        {/* Subtle Background Pattern for Depth */}
         <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
-
         <div className="relative p-4 md:p-8 max-w-[1600px] mx-auto animate-in fade-in zoom-in-95 duration-500">
           {renderContent()}
         </div>
       </div>
+
+      {/* Add Faculty Modal */}
+      <AddFacultyModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddFaculty={handleAddFaculty}
+      />
     </div>
   );
 };
